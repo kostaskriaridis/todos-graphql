@@ -27,6 +27,8 @@ module.exports = {
             const todo = await Todo.findById(args.id);
 
             todo.destroy();
+
+            return todo;
         }
     }
 };

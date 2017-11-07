@@ -32,18 +32,30 @@ class Todos extends PureComponent {
                         Add
                     </button>
                 </form>
-                <ul>
-                    {todos.map(todo => (
-                        <Todo
-                            key={todo.id}
-                            id={todo.id}
-                            completed={todo.completed}
-                            text={todo.text}
-                            onUpdateTodo={this.handleUpdateTodo}
-                            onDeleteTodo={this.handleDeleteTodo} />
-                    ))}
-                </ul>
+                {this.renderTodos()}
             </div>
+        );
+    }
+
+    renderTodos() {
+        const { todos } = this.props.data;
+
+        if (!todos.length) {
+            return <div>No todos added yet</div>;
+        }
+
+        return (
+            <ul>
+                {todos.map(todo => (
+                    <Todo
+                        key={todo.id}
+                        id={todo.id}
+                        completed={todo.completed}
+                        text={todo.text}
+                        onUpdateTodo={this.handleUpdateTodo}
+                        onDeleteTodo={this.handleDeleteTodo} />
+                ))}
+            </ul>
         );
     }
 
@@ -84,25 +96,56 @@ export default compose(
     graphql(TODOS_QUERY),
     graphql(TODO_CREATE_MUTATION, {
         options: {
-            refetchQueries: [
-                { query: TODOS_QUERY }
-            ]
+            update: (proxy, { data: { createTodo } }) => {
+                const data = proxy.readQuery({
+                    query: TODOS_QUERY
+                });
+
+                data.todos.push(createTodo);
+
+                proxy.writeQuery({
+                    query: TODOS_QUERY,
+                    data
+                });
+            }
         },
         name: 'createTodo'
     }),
     graphql(TODO_UPDATE_MUTATION, {
         options: {
-            refetchQueries: [
-                { query: TODOS_QUERY }
-            ]
+            update: (proxy,{ data: { updateTodo } }) => {
+                const data = proxy.readQuery({
+                    query: TODOS_QUERY
+                });
+
+                const todoIndex = data.todos.findIndex(todo => todo.id === updateTodo.id);
+
+                data.todos[todoIndex] = updateTodo;
+
+                proxy.writeQuery({
+                    query: TODOS_QUERY,
+                    data
+                });
+            }
         },
         name: 'updateTodo'
     }),
     graphql(TODO_DELETE_MUTATION, {
         options: {
-            refetchQueries: [
-                { query: TODOS_QUERY }
-            ]
+            update: (proxy,{ data: { deleteTodo } }) => {
+                const data = proxy.readQuery({
+                    query: TODOS_QUERY
+                });
+
+                const todoIndex = data.todos.findIndex(todo => todo.id === deleteTodo.id);
+
+                data.todos.splice(todoIndex, 1);
+
+                proxy.writeQuery({
+                    query: TODOS_QUERY,
+                    data
+                });
+            }
         },
         name: 'deleteTodo'
     })
