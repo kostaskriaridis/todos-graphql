@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { compose, graphql } from 'react-apollo';
-import Todo from './todo';
+import Todo from '../todo';
 import {
     TODOS_QUERY,
     TODO_CREATE_MUTATION,

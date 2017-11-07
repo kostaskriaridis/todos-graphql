@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
-import InputUpdate from './common/input-update';
+import InputUpdate from '../common/input-update';
 import './todo.css';
 
 export default class Todo extends PureComponent {
