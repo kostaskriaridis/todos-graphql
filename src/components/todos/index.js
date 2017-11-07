@@ -8,6 +8,11 @@ import {
     TODO_UPDATE_MUTATION,
     TODO_DELETE_MUTATION
 } from './query';
+import {
+    todoCreateOptions,
+    todoUpdateOptions,
+    todoDeleteOptions
+} from './options';
 
 class Todos extends PureComponent {
     nodes = {};
@@ -79,46 +84,7 @@ class Todos extends PureComponent {
 
 export default compose(
     graphql(TODOS_QUERY),
-    graphql(TODO_CREATE_MUTATION, {
-        options: {
-            update: (proxy, { data: { createTodo } }) => {
-                const data = proxy.readQuery({ query: TODOS_QUERY });
-
-                data.todos.push(createTodo);
-
-                proxy.writeQuery({ query: TODOS_QUERY, data });
-            }
-        },
-        name: 'createTodo'
-    }),
-    graphql(TODO_UPDATE_MUTATION, {
-        options: {
-            update: (proxy,{ data: { updateTodo } }) => {
-                const data = proxy.readQuery({ query: TODOS_QUERY });
-
-                data.todos = data.todos.map(todo => {
-                    if (todo.id === updateTodo.id) {
-                        return updateTodo;
-                    }
-
-                    return todo;
-                });
-
-                proxy.writeQuery({ query: TODOS_QUERY, data });
-            }
-        },
-        name: 'updateTodo'
-    }),
-    graphql(TODO_DELETE_MUTATION, {
-        options: {
-            update: (proxy,{ data: { deleteTodo } }) => {
-                const data = proxy.readQuery({ query: TODOS_QUERY });
-
-                data.todos = data.todos.filter(todo => todo.id !== deleteTodo.id);
-
-                proxy.writeQuery({ query: TODOS_QUERY, data });
-            }
-        },
-        name: 'deleteTodo'
-    })
+    graphql(TODO_CREATE_MUTATION, todoCreateOptions),
+    graphql(TODO_UPDATE_MUTATION, todoUpdateOptions),
+    graphql(TODO_DELETE_MUTATION, todoDeleteOptions)
 )(Todos);
