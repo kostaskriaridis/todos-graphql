@@ -1,0 +1,3 @@
+.todo_completed .todo__text {
+    text-decoration: line-through;
+}
