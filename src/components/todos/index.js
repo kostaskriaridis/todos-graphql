@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { compose, graphql } from 'react-apollo';
+import Form from './form';
 import Todo from '../todo';
 import {
     TODOS_QUERY,
@@ -12,6 +13,19 @@ class Todos extends PureComponent {
     nodes = {};
 
     render() {
+        const { loading, error } = this.props.data;
+
+        return (
+            <div>
+                <Form
+                    disabled={loading || Boolean(error)}
+                    onSubmit={this.handleCreateTodo} />
+                {this.renderTodos()}
+            </div>
+        );
+    }
+
+    renderTodos() {
         const { todos, loading, error } = this.props.data;
 
         if (loading) {
@@ -21,24 +35,6 @@ class Todos extends PureComponent {
         if (error) {
             return <div>{error.message}</div>;
         }
-
-        return (
-            <div>
-                <form onSubmit={this.handleSubmit}>
-                    <input
-                        ref={inputNode => this.nodes.input = inputNode}
-                        type='text' />
-                    <button type='submit'>
-                        Add
-                    </button>
-                </form>
-                {this.renderTodos()}
-            </div>
-        );
-    }
-
-    renderTodos() {
-        const { todos } = this.props.data;
 
         if (!todos.length) {
             return <div>No todos added yet</div>;
@@ -59,21 +55,10 @@ class Todos extends PureComponent {
         );
     }
 
-    handleSubmit = event => {
-        event.preventDefault();
-
-        const inputNode = this.nodes.input;
-        const value = inputNode.value.trim();
-
-        if (!value) {
-            return;
-        }
-
+    handleCreateTodo = text => {
         this.props.createTodo({
-            variables: { text: value }
+            variables: { text }
         });
-
-        inputNode.value = '';
     };
 
     handleUpdateTodo = (todoId, name, value) => {
@@ -97,16 +82,11 @@ export default compose(
     graphql(TODO_CREATE_MUTATION, {
         options: {
             update: (proxy, { data: { createTodo } }) => {
-                const data = proxy.readQuery({
-                    query: TODOS_QUERY
-                });
+                const data = proxy.readQuery({ query: TODOS_QUERY });
 
                 data.todos.push(createTodo);
 
-                proxy.writeQuery({
-                    query: TODOS_QUERY,
-                    data
-                });
+                proxy.writeQuery({ query: TODOS_QUERY, data });
             }
         },
         name: 'createTodo'
@@ -114,18 +94,17 @@ export default compose(
     graphql(TODO_UPDATE_MUTATION, {
         options: {
             update: (proxy,{ data: { updateTodo } }) => {
-                const data = proxy.readQuery({
-                    query: TODOS_QUERY
+                const data = proxy.readQuery({ query: TODOS_QUERY });
+
+                data.todos = data.todos.map(todo => {
+                    if (todo.id === updateTodo.id) {
+                        return updateTodo;
+                    }
+
+                    return todo;
                 });
 
-                const todoIndex = data.todos.findIndex(todo => todo.id === updateTodo.id);
-
-                data.todos[todoIndex] = updateTodo;
-
-                proxy.writeQuery({
-                    query: TODOS_QUERY,
-                    data
-                });
+                proxy.writeQuery({ query: TODOS_QUERY, data });
             }
         },
         name: 'updateTodo'
@@ -133,18 +112,11 @@ export default compose(
     graphql(TODO_DELETE_MUTATION, {
         options: {
             update: (proxy,{ data: { deleteTodo } }) => {
-                const data = proxy.readQuery({
-                    query: TODOS_QUERY
-                });
+                const data = proxy.readQuery({ query: TODOS_QUERY });
 
-                const todoIndex = data.todos.findIndex(todo => todo.id === deleteTodo.id);
+                data.todos = data.todos.filter(todo => todo.id !== deleteTodo.id);
 
-                data.todos.splice(todoIndex, 1);
-
-                proxy.writeQuery({
-                    query: TODOS_QUERY,
-                    data
-                });
+                proxy.writeQuery({ query: TODOS_QUERY, data });
             }
         },
         name: 'deleteTodo'
