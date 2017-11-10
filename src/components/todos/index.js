@@ -68,13 +68,13 @@ class Todos extends PureComponent {
         });
     };
 
-    handleUpdateTodo = (todoId, name, value) => {
+    handleUpdateTodo = (todoId, todo) => {
         this.props.updateTodo({
             variables: {
                 todoId,
-                [name]: value
+                ...todo
             },
-            optimisticResponse: updateOptimisticResponse(todoId, name, value)
+            optimisticResponse: updateOptimisticResponse(todoId, todo)
         });
     };
 

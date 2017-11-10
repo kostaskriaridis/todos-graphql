@@ -21,20 +21,28 @@ export default class Todo extends PureComponent {
                     className='todo__text'
                     name='text'
                     value={text}
-                    onChangeValue={this.handleUpdateTodo} />
+                    onChangeValue={this.handleUpdateTodoText} />
                 <button onClick={this.handleDeleteTodo}>x</button>
             </li>
         );
     }
 
-    handleUpdateTodo = ({ name, value }) => {
-        this.props.onUpdateTodo(this.props.id, name, value);
+    handleUpdateTodoText = ({ name, value }) => {
+        const { id, completed, onUpdateTodo } = this.props;
+
+        onUpdateTodo(id, {
+            completed,
+            text: value
+        });
     };
 
     handleToggleTodo = event => {
-        const { name, checked } = event.target;
+        const { id, text, onUpdateTodo } = this.props;
 
-        this.props.onUpdateTodo(this.props.id, name, checked);
+        onUpdateTodo(id, {
+            text,
+            completed: event.target.checked
+        });
     };
 
     handleDeleteTodo = () => {
