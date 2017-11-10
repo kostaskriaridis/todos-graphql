@@ -10,7 +10,7 @@ const TodoModel = db.define('todo', {
     completed: { type: Sequelize.BOOLEAN }
 });
 
-db.sync({ force: true }).then(async () => {
+db.sync({ force: true }).then(() => {
     ['Learn JS', 'Learn ReactJS', 'Learn Redux', 'Learn Graphql'].forEach(todo => {
         TodoModel.create({
             text: todo,

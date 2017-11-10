@@ -9,14 +9,15 @@ import {
     TODO_DELETE_MUTATION
 } from './query';
 import {
-    todoCreateOptions,
-    todoUpdateOptions,
-    todoDeleteOptions
+    createOptions,
+    createOptimisticResponse,
+    updateOptions,
+    updateOptimisticResponse,
+    deleteOptions,
+    deleteOptimisticResponse
 } from './options';
 
 class Todos extends PureComponent {
-    nodes = {};
-
     render() {
         const { loading, error } = this.props.data;
 
@@ -62,7 +63,8 @@ class Todos extends PureComponent {
 
     handleCreateTodo = text => {
         this.props.createTodo({
-            variables: { text }
+            variables: { text },
+            optimisticResponse: createOptimisticResponse(text)
         });
     };
 
@@ -71,20 +73,22 @@ class Todos extends PureComponent {
             variables: {
                 todoId,
                 [name]: value
-            }
+            },
+            optimisticResponse: updateOptimisticResponse(todoId, name, value)
         });
     };
 
     handleDeleteTodo = todoId => {
         this.props.deleteTodo({
-            variables: { todoId }
+            variables: { todoId },
+            optimisticResponse: deleteOptimisticResponse(todoId)
         });
     };
 }
 
 export default compose(
     graphql(TODOS_QUERY),
-    graphql(TODO_CREATE_MUTATION, todoCreateOptions),
-    graphql(TODO_UPDATE_MUTATION, todoUpdateOptions),
-    graphql(TODO_DELETE_MUTATION, todoDeleteOptions)
+    graphql(TODO_CREATE_MUTATION, createOptions),
+    graphql(TODO_UPDATE_MUTATION, updateOptions),
+    graphql(TODO_DELETE_MUTATION, deleteOptions)
 )(Todos);

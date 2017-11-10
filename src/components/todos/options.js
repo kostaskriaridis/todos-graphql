@@ -8,7 +8,7 @@ function writeTodosQuery(proxy, data) {
     proxy.writeQuery({ query: TODOS_QUERY, data });
 }
 
-export const todoCreateOptions = {
+export const createOptions = {
     options: {
         update: (proxy, { data: { createTodo } }) => {
             const data = readTodosQuery(proxy);
@@ -21,8 +21,19 @@ export const todoCreateOptions = {
     name: 'createTodo'
 };
 
+export function createOptimisticResponse(text) {
+    return {
+        __typename: 'Mutation',
+        createTodo: {
+            __typename: 'Todo',
+            id: -1,
+            completed: false,
+            text
+        }
+    };
+}
 
-export const todoUpdateOptions = {
+export const updateOptions = {
     options: {
         update: (proxy,{ data: { updateTodo } }) => {
             const data = readTodosQuery(proxy);
@@ -41,7 +52,18 @@ export const todoUpdateOptions = {
     name: 'updateTodo'
 };
 
-export const todoDeleteOptions = {
+export function updateOptimisticResponse(todoId, name, value) {
+    return {
+        __typename: 'Mutation',
+        updateTodo: {
+            __typename: 'Todo',
+            id: todoId,
+            [name]: value
+        }
+    };
+}
+
+export const deleteOptions = {
     options: {
         update: (proxy,{ data: { deleteTodo } }) => {
             const data = readTodosQuery(proxy);
@@ -53,3 +75,13 @@ export const todoDeleteOptions = {
     },
     name: 'deleteTodo'
 };
+
+export function deleteOptimisticResponse(todoId) {
+    return {
+        __typename: 'Mutation',
+        deleteTodo: {
+            __typename: 'Todo',
+            id: todoId
+        }
+    };
+}
