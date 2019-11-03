@@ -16,7 +16,7 @@ module.exports = {
         },
 
         async updateTodo(root, args) {
-            const todo = await Todo.findById(args.id);
+            const todo = await Todo.findByPk(args.id);
 
             todo.update(args);
 
@@ -24,7 +24,7 @@ module.exports = {
         },
 
         async deleteTodo(root, args) {
-            const todo = await Todo.findById(args.id);
+            const todo = await Todo.findByPk(args.id);
 
             todo.destroy();
 

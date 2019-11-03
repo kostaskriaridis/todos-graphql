@@ -1,7 +1,6 @@
-const { makeExecutableSchema } = require('graphql-tools');
-const resolvers = require('./resolvers');
+const { gql } = require('apollo-server-express');
 
-const typeDefs = `
+module.exports = gql`
 type Todo {
     id: Int
     text: String
@@ -16,5 +15,3 @@ type Mutation {
     deleteTodo(id: ID!): Todo
 }
 `;
-
-module.exports = makeExecutableSchema({ typeDefs, resolvers });

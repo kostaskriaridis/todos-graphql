@@ -4,7 +4,7 @@ import { ApolloProvider } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import Todos from './components/todos';
+import App from './components/app';
 
 const client = new ApolloClient({
     link: new HttpLink(),
@@ -13,7 +13,7 @@ const client = new ApolloClient({
 
 ReactDOM.render(
     <ApolloProvider client={client}>
-        <Todos />
+        <App />
     </ApolloProvider>,
     document.getElementById('root')
 );
