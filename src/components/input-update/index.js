@@ -2,7 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 
 const ETNER_KEY_CODE = 13;
 
-export default function InputUpdate({ name, value, className, onChangeValue }) {
+export default function InputUpdate({
+    name,
+    value,
+    className,
+    onChangeValue
+}) {
     const inputNode = useRef(null);
     const [isEditing, setIsEditing] = useState(false);
 

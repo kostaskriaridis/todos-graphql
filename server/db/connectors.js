@@ -11,9 +11,15 @@ const TodoModel = db.define('todo', {
 });
 
 db.sync({ force: true }).then(() => {
-    ['Learn JS', 'Learn ReactJS', 'Learn Redux', 'Learn Graphql'].forEach(todo => {
+    [
+        'Learn JS',
+        'Learn ReactJS',
+        'Learn Redux',
+        'Learn Graphql',
+        'Learn Hooks'
+    ].forEach(text => {
         TodoModel.create({
-            text: todo,
+            text,
             completed: false
         });
     });

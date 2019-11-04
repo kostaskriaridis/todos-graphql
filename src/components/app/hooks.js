@@ -1,5 +1,4 @@
-import gql from 'graphql-tag';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import {
     TODOS_QUERY,
     TODO_CREATE_MUTATION,
@@ -7,6 +6,10 @@ import {
     TODO_DELETE_MUTATION
 } from './query';
 
+/**
+ * Returns a function for todo creation
+ * @returns {Function}
+ */
 export function useCreateMutation() {
     const [createTodo] = useMutation(
         TODO_CREATE_MUTATION,
@@ -38,6 +41,10 @@ export function useCreateMutation() {
     };
 }
 
+/**
+ * Returns a function for todo update
+ * @returns {Function}
+ */
 export function useUpdateMutation() {
     const [updateTodo] = useMutation(
         TODO_UPDATE_MUTATION,
@@ -61,14 +68,13 @@ export function useUpdateMutation() {
         }
     );
 
-    return function(todoId, todo) {
+    return function(todo) {
         updateTodo({
-            variables: { todoId, ...todo },
+            variables: todo,
             optimisticResponse: {
                 __type: 'Mutation',
                 updateTodo: {
                     __typename: 'Todo',
-                    id: todoId,
                     ...todo
                 }
             }
@@ -76,6 +82,10 @@ export function useUpdateMutation() {
     };
 }
 
+/**
+ * Returns a function for todo deleting
+ * @returns {Function}
+ */
 export function useDeleteMutation() {
     const [deleteTodo] = useMutation(
         TODO_DELETE_MUTATION,
@@ -91,14 +101,14 @@ export function useDeleteMutation() {
         }
     );
 
-    return function(todoId) {
+    return function(id) {
         deleteTodo({
-            variables: { todoId },
+            variables: { id },
             optimisticResponse: {
                 __type: 'Mutation',
                 deleteTodo: {
                     __typename: 'Todo',
-                    id: todoId
+                    id
                 }
             }
         });

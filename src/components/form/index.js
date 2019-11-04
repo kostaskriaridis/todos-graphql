@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 
-export default function Form({ disabled, onSubmit }) {
+export default function Form({
+    disabled,
+    onSubmit
+}) {
     const [value, setValue] = useState('');
 
     function handleChangeValue(event) {
@@ -21,7 +24,11 @@ export default function Form({ disabled, onSubmit }) {
                 type='text'
                 disabled={disabled}
                 onChange={handleChangeValue} />
-            <button type='submit' disabled={!value}>Add</button>
+            <button
+                type='submit'
+                disabled={!value}>
+                Add
+            </button>
         </form>
     );
 }

@@ -1,22 +1,30 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import InputUpdate from '../input-update';
 import './todo.css';
 
-export default function Todo({ id, completed, text, onUpdateTodo, onDeleteTodo }) {
+export default function Todo({
+    id,
+    completed,
+    text,
+    onUpdateTodo,
+    onDeleteTodo
+}) {
     const todoClass = classNames('todo', {
         todo_completed: completed
     });
 
     function handleUpdateTodoText({ name, value }) {
-        onUpdateTodo(id, {
+        onUpdateTodo({
+            id,
             completed,
             text: value
         });
     }
 
     function handleToggleTodo(event) {
-        onUpdateTodo(id, {
+        onUpdateTodo({
+            id,
             text,
             completed: event.target.checked
         });

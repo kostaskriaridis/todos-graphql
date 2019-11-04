@@ -21,8 +21,8 @@ export const TODO_CREATE_MUTATION = gql`
 `;
 
 export const TODO_UPDATE_MUTATION = gql`
-    mutation TodoUpdateMutation($todoId: ID!, $text: String, $completed: Boolean) {
-        updateTodo(id: $todoId, text: $text, completed: $completed) {
+    mutation TodoUpdateMutation($id: ID!, $text: String, $completed: Boolean) {
+        updateTodo(id: $id, text: $text, completed: $completed) {
             id
             text
             completed
@@ -31,8 +31,8 @@ export const TODO_UPDATE_MUTATION = gql`
 `;
 
 export const TODO_DELETE_MUTATION = gql`
-    mutation TodoDeleteMutation($todoId: ID!) {
-        deleteTodo(id: $todoId) {
+    mutation TodoDeleteMutation($id: ID!) {
+        deleteTodo(id: $id) {
             id
         }
     }
