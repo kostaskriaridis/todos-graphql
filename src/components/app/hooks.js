@@ -1,10 +1,24 @@
-import { useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import {
     TODOS_QUERY,
     TODO_CREATE_MUTATION,
     TODO_UPDATE_MUTATION,
     TODO_DELETE_MUTATION
 } from './query';
+
+/**
+ * Get todos state
+ * @returns {Object}
+ */
+export function useTodos() {
+    const { loading, error, data } = useQuery(TODOS_QUERY);
+
+    return {
+        loading,
+        error,
+        todos: data ? data.todos : []
+    };
+}
 
 /**
  * Returns a function for todo creation

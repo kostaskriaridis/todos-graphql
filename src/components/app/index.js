@@ -1,16 +1,15 @@
 import React, { Fragment } from 'react';
-import { useQuery } from '@apollo/react-hooks';
 import Form from '../form';
 import Todos from '../todos';
 import {
+    useTodos,
     useCreateMutation,
     useUpdateMutation,
     useDeleteMutation
 } from './hooks';
-import { TODOS_QUERY } from './query';
 
 export default function App() {
-    const { loading, error, data } = useQuery(TODOS_QUERY);
+    const { loading, error, todos } = useTodos();
     const handleCreateTodo = useCreateMutation();
     const handleUpdateTodo = useUpdateMutation();
     const handleDeleteTodo = useDeleteMutation();
@@ -23,7 +22,7 @@ export default function App() {
             <Todos
                 loading={loading}
                 error={error}
-                todos={data ? data.todos : []}
+                todos={todos}
                 onUpdateTodo={handleUpdateTodo}
                 onDeleteTodo={handleDeleteTodo} />
         </Fragment>
