@@ -1,4 +1,10 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+
+Form.propTypes = {
+    disabled: PropTypes.bool.isRequired,
+    onSubmit: PropTypes.func.isRequired
+};
 
 export default function Form({
     disabled,

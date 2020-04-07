@@ -1,6 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 const ETNER_KEY_CODE = 13;
+
+InputUpdate.propTypes = {
+    name: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+    className: PropTypes.string,
+    onChangeValue: PropTypes.func.isRequired
+};
 
 export default function InputUpdate({
     name,
@@ -25,7 +33,7 @@ export default function InputUpdate({
     function handleBlur() {
         const inputValue = inputNode.current.value.trim();
 
-        if (inputNode && inputValue !== value) {
+        if (inputValue !== value) {
             onChangeValue({
                 name,
                 value: inputValue

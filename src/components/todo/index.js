@@ -1,7 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import InputUpdate from '../input-update';
 import './todo.css';
+
+Todo.propTypes = {
+    id: PropTypes.number.isRequired,
+    completed: PropTypes.bool.isRequired,
+    text: PropTypes.string.isRequired,
+    onUpdateTodo: PropTypes.func.isRequired,
+    onDeleteTodo: PropTypes.func.isRequired
+};
 
 export default function Todo({
     id,
