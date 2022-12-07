@@ -22,7 +22,7 @@
     "apollo-link-http": "^1.5.16",
     "apollo-server-express": "^2.11.0",
     "classnames": "^2.2.6",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.10.1",
     "prop-types": "^15.7.2",
